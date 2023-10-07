@@ -53,41 +53,34 @@ function displayNews(newsData) {
   });
 }
 
-// Function to display books data in the UI
-function displayBooks(booksData) {
-  const booksContainer = document.getElementById("books-container");
-  booksContainer.innerHTML = ""; // Clear previous content
+// Función para formatear la fecha y el tiempo
+function formatDateTime(dateTimeString) {
+  const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', timeZoneName: 'short' };
+  const formattedDate = new Date(dateTimeString).toLocaleDateString(undefined, options);
+  return formattedDate;
+}
 
-  if (booksData && booksData.length > 0) {
-    booksData.forEach(bookItem => {
-      const bookCard = document.createElement("div");
-      bookCard.classList.add("card");
-      bookCard.classList.add("d-flex"); // Use flexbox to align items horizontally
+// Function to display news data in the UI
+function displayNews(newsData) {
+  const newsContainer = document.getElementById("news-container");
+  newsContainer.innerHTML = ""; // Clear previous content
 
-      bookCard.innerHTML = `
-        <div class="card-body">
-          <h5 class="card-title mb-3">${bookItem.title}</h5>
-          <p class="card-text"><strong>Author:</strong> ${bookItem.author}</p>
-          <p class="card-text"><strong>Description:</strong> ${bookItem.description || "No description available."}</p>
-          ${bookItem.publisher ? `<p class="card-text"><strong>Publisher:</strong> ${bookItem.publisher}</p>` : ''}
-          ${bookItem.published_date ? `<p class="card-text"><strong>Published Date:</strong> ${bookItem.published_date}</p>` : ''}
-          ${bookItem.pages ? `<p class="card-text"><strong>Pages:</strong> ${bookItem.pages}</p>` : ''}
-          ${bookItem.genre ? `<p class="card-text"><strong>Genre:</strong> ${bookItem.genre}</p>` : ''}
-          ${bookItem.primary_isbn10 ? `<p class="card-text"><strong>ISBN-10:</strong> ${bookItem.primary_isbn10}</p>` : ''}
-          ${bookItem.primary_isbn13 ? `<p class="card-text"><strong>ISBN-13:</strong> ${bookItem.primary_isbn13}</p>` : ''}
-          <div class="card-body mb-4" style="border: 1px solid #ddd; border-radius: 10px; padding: 15px; margin-top: 15px; background-color: #f9f9f9; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); transition: all 0.3s ease;">
-          <h6 style="margin-bottom: 10px; font-weight: bold;">Purchase Links <i id="arrow-icon" class="fas fa-chevron-down"></i></h6>
-          ${bookItem.buy_links ? createBuyLinksTable(bookItem.buy_links) : ''}
-          </div>
-          <a href="${bookItem.amazon_product_url}" target="_blank" class="btn btn-primary">Buy Now</a>
-        </div>
-      `;
-
-      booksContainer.appendChild(bookCard);
-    });
-  } else {
-    displayBooksError(); // Muestra un mensaje de error en la UI si no hay datos de libros
-  }
+  newsData.forEach(newsItem => {
+    const newsCard = document.createElement("div");
+    newsCard.classList.add("card");
+    newsCard.classList.add("d-flex");
+    newsCard.innerHTML = `
+      <div class="card-body">
+        <img src="${newsItem.multimedia[0].url}" class="card-img-top card-img-bottom img-fluid" alt="${newsItem.title}" style="max-width: 200px; max-height: 200px; object-fit: cover; float: left; margin-right: 10px;">
+        <h5 class="card-title">${newsItem.title}</h5>
+        <p class="card-text">${newsItem.abstract}</p>
+        <p class="card-text"><strong>Section:</strong> ${newsItem.section}</p>
+        <p class="card-text"><strong>Published Date:</strong> ${formatDateTime(newsItem.published_date)}</p>
+        <a href="${newsItem.url}" target="_blank" class="btn btn-primary">Read More</a>
+      </div>
+    `;
+    newsContainer.appendChild(newsCard);
+  });
 }
 
 // Función para crear una tabla HTML con los enlaces de compra de un libro (mostrando solo 4 enlaces)
