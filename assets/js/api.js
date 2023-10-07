@@ -37,22 +37,39 @@ function displayNews(newsData) {
 
   newsData.forEach(newsItem => {
     // Verificar si multimedia y su primer elemento existen antes de acceder a url
-    const imageUrl = newsItem.multimedia && newsItem.multimedia[0] && newsItem.multimedia[0].url ? newsItem.multimedia[0].url : 'URL_por_defecto.jpg';
+    if (newsItem.multimedia && newsItem.multimedia[0] && newsItem.multimedia[0].url) {
+      const imageUrl = newsItem.multimedia[0].url;
 
-    const newsCard = document.createElement("div");
-    newsCard.classList.add("card");
-    newsCard.classList.add("d-flex");
-    newsCard.innerHTML = `
-      <div class="card-body">
-        <img src="${imageUrl}" class="card-img-top card-img-bottom img-fluid" alt="${newsItem.title}" style="max-width: 200px; max-height: 200px; object-fit: cover; float: left; margin-right: 10px;">
-        <h5 class="card-title">${newsItem.title}</h5>
-        <p class="card-text">${newsItem.abstract}</p>
-        <p class="card-text"><strong>Section:</strong> ${newsItem.section}</p>
-        <p class="card-text"><strong>Published Date:</strong> ${formatDateTime(newsItem.published_date)}</p>
-        <a href="${newsItem.url}" target="_blank" class="btn btn-primary">Read More</a>
-      </div>
-    `;
-    newsContainer.appendChild(newsCard);
+      const newsCard = document.createElement("div");
+      newsCard.classList.add("card");
+      newsCard.classList.add("d-flex");
+      newsCard.innerHTML = `
+        <div class="card-body">
+          <img src="${imageUrl}" class="card-img-top card-img-bottom img-fluid" alt="${newsItem.title}" style="max-width: 200px; max-height: 200px; object-fit: cover; float: left; margin-right: 10px;">
+          <h5 class="card-title">${newsItem.title}</h5>
+          <p class="card-text">${newsItem.abstract}</p>
+          <p class="card-text"><strong>Section:</strong> ${newsItem.section}</p>
+          <p class="card-text"><strong>Published Date:</strong> ${formatDateTime(newsItem.published_date)}</p>
+          <a href="${newsItem.url}" target="_blank" class="btn btn-primary">Read More</a>
+        </div>
+      `;
+      newsContainer.appendChild(newsCard);
+    } else {
+      // Si no hay imagen disponible, mostrar solo el texto sin la etiqueta de imagen
+      const newsCard = document.createElement("div");
+      newsCard.classList.add("card");
+      newsCard.classList.add("d-flex");
+      newsCard.innerHTML = `
+        <div class="card-body">
+          <h5 class="card-title">${newsItem.title}</h5>
+          <p class="card-text">${newsItem.abstract}</p>
+          <p class="card-text"><strong>Section:</strong> ${newsItem.section}</p>
+          <p class="card-text"><strong>Published Date:</strong> ${formatDateTime(newsItem.published_date)}</p>
+          <a href="${newsItem.url}" target="_blank" class="btn btn-primary">Read More</a>
+        </div>
+      `;
+      newsContainer.appendChild(newsCard);
+    }
   });
 }
 
@@ -112,17 +129,18 @@ function formatDateTime(dateTimeString) {
 // Función para crear una tabla HTML con los enlaces de compra de un libro (mostrando solo 4 enlaces)
 function createBuyLinksTable(buyLinks) {
   let tableHTML = `
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th scope="col">Name</th>
-          <th scope="col">URL</th>
-        </tr>
-      </thead>
-      <tbody>
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">URL</th>
+          </tr>
+        </thead>
+        <tbody>
   `;
 
-  const linksToShow = Math.min(buyLinks.length, 4); // Mostrar como máximo 4 enlaces
+  const linksToShow = Math.min(buyLinks.length, 4);
 
   for (let i = 0; i < linksToShow; i++) {
     const link = buyLinks[i];
@@ -130,8 +148,9 @@ function createBuyLinksTable(buyLinks) {
   }
 
   tableHTML += `
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    </div>
   `;
 
   return tableHTML;
