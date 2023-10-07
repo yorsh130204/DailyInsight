@@ -38,14 +38,18 @@ function displayNews(newsData) {
   newsData.forEach(newsItem => {
     const newsCard = document.createElement("div");
     newsCard.classList.add("card");
-    newsCard.classList.add("d-flex"); // Use flexbox to align items horizontally
+    newsCard.classList.add("d-flex");
+    
+    // Verifica si multimedia y su primer elemento existen antes de acceder a url
+    const imageUrl = newsItem.multimedia && newsItem.multimedia[0] && newsItem.multimedia[0].url ? newsItem.multimedia[0].url : 'URL_por_defecto.jpg';
+
     newsCard.innerHTML = `
       <div class="card-body">
-        <img src="${newsItem.multimedia[0].url}" class="card-img-top card-img-bottom img-fluid" alt="${newsItem.title}" style="max-width: 200px; max-height: 200px; object-fit: cover; float: left; margin-right: 10px;">
+        <img src="${imageUrl}" class="card-img-top card-img-bottom img-fluid" alt="${newsItem.title}" style="max-width: 200px; max-height: 200px; object-fit: cover; float: left; margin-right: 10px;">
         <h5 class="card-title">${newsItem.title}</h5>
         <p class="card-text">${newsItem.abstract}</p>
         <p class="card-text"><strong>Section:</strong> ${newsItem.section}</p>
-        <p class="card-text"><strong>Published Date:</strong> ${newsItem.published_date}</p>
+        <p class="card-text"><strong>Published Date:</strong> ${formatDateTime(newsItem.published_date)}</p>
         <a href="${newsItem.url}" target="_blank" class="btn btn-primary">Read More</a>
       </div>
     `;
