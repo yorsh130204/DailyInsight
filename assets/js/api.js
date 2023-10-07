@@ -93,17 +93,18 @@ function displayBooks(booksData) {
 // Función para crear una tabla HTML con los enlaces de compra de un libro (mostrando solo 4 enlaces)
 function createBuyLinksTable(buyLinks) {
   let tableHTML = `
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th scope="col">Name</th>
-          <th scope="col">URL</th>
-        </tr>
-      </thead>
-      <tbody>
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">URL</th>
+          </tr>
+        </thead>
+        <tbody>
   `;
 
-  const linksToShow = Math.min(buyLinks.length, 4); // Mostrar como máximo 4 enlaces
+  const linksToShow = Math.min(buyLinks.length, 4);
 
   for (let i = 0; i < linksToShow; i++) {
     const link = buyLinks[i];
@@ -111,8 +112,9 @@ function createBuyLinksTable(buyLinks) {
   }
 
   tableHTML += `
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    </div>
   `;
 
   return tableHTML;
